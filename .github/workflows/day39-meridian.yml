@@ -1,0 +1,59 @@
+name: Day 39 Meridian checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      exercise:
+        description: Which Day 39 tests to run
+        required: true
+        default: smoke
+        type: choice
+        options:
+          - smoke
+          - timing
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      LESSON_EXERCISE: ${{ github.event_name == 'workflow_dispatch' && inputs.exercise == 'timing' && 'timing' || '' }}
+    defaults:
+      run:
+        working-directory: day-39-ci-cd-and-flaky-test-triage
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: day-39-ci-cd-and-flaky-test-triage/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Day 39 tests
+        run: npx playwright test
+
+      - name: Upload Playwright reports and evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: day39-playwright-${{ github.run_id }}
+          path: |
+            day-39-ci-cd-and-flaky-test-triage/playwright-report/
+            day-39-ci-cd-and-flaky-test-triage/test-results/
+          if-no-files-found: ignore
+          retention-days: 7

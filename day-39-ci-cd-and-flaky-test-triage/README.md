@@ -16,7 +16,7 @@ On this recording Mac, `PLAYWRIGHT_CHROMIUM_CHANNEL=chrome` selects installed Ch
 
 The workflow lives in the repository root at `.github/workflows/day39-meridian.yml`.
 
-Open Actions, choose **Day 39 Meridian checks**, click **Run workflow** and choose **smoke**. Read the checkout, Node setup, dependency installation, browser installation, test and evidence-upload steps. The same smoke workflow runs for matching pushes and pull requests to main.
+Open Actions, choose **Day 39 Meridian checks**, click **Run workflow** and choose **smoke**. Choose **timing** for the repaired timing test, or **practice-timing** to run the intentionally flaky test in the separate `day-39-practice` copy. The practice run is expected to fail due to `failOnFlakyTests`, even though the retry passes; its report is uploaded after the failure. Read the checkout, Node setup, dependency installation, browser installation, test and evidence-upload steps. The smoke workflow also runs for matching pushes and pull requests to main.
 
 Download the report artifact from the run, extract it, then open its HTML report:
 

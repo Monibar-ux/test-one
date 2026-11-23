@@ -1,66 +1,80 @@
-Setup Intructions
-Install dependencies
-npm install
+# Day 40 Setup Notes
+
+## Install dependencies
+
+Run these commands from the Day 40 project folder:
+
+```powershell
 npm ci
 npx playwright install chromium
+```
 
-Environment Variables
-Create a .env file
+## Configure environment variables
+
+Create a local `.env` file from the example:
+
+```powershell
 Copy-Item .env.example .env
+```
 
-Add training credentials to .env file using these variable names and safe example values:
+Add your approved training-account values to `.env` using these variable names. The values below are fictional examples:
+
+```env
 MERIDIAN_EMAIL=student@example.test
 MERIDIAN_PASSWORD=not-a-real-password
 MERIDIAN_POLICY_NUMBER=POL-TRAINING-0001
+```
 
-FYI: If your password contains a # character, put double quotes in the .env file. The # may be treated as the beginning of a comment, causing a part of your password to be ignored.
+If a password contains `#`, put it in double quotes in `.env`, because `#` may otherwise begin a comment:
 
-Example:
+```env
 MERIDIAN_PASSWORD="not-a-real-password"
+```
 
-Run the tests (whichever one is applicable for what you're testing)
-npm test (runs all tests, list below runs tests individually)
+Keep the real `.env` private; it is ignored by Git.
+
+## Run tests
+
+Run the full suite or an individual scenario:
+
+```powershell
+npm test
 npm run test:policy
 npm run test:quote
 npm run test:api
+```
 
-To view Allure report
-npm run report:generate (generates Allure report)
-npm run report:open (opens an Allure browser page to view report)
+## View the Allure report
 
-GitHub Actions
-To Add your credentials secretly to GitHub (Will not be visible to the public)
+Generate and open the report:
 
-GitHub Secrets: Settings => Secrets and Variables => Actions
+```powershell
+npm run report:generate
+npm run report:open
+```
 
-Add these repository secrets:
+## Run GitHub Actions
 
-MERIDIAN_EMAIL
-MERIDIAN_PASSWORD
-MERIDIAN_POLICY_NUMBER
+Add these as separate repository secrets under **Settings → Secrets and variables → Actions**:
+
+- `MERIDIAN_EMAIL`
+- `MERIDIAN_PASSWORD`
+- `MERIDIAN_POLICY_NUMBER`
+
+Use the approved training-account credentials and a policy owned by that account. Do not put their real values in this file or commit them.
 
 To run the workflow:
 
-Open the repository on GitHub.
-Select Actions.
-Choose Day 40 Meridian Capstone.
-Select Run workflow.
-Choose the main branch and run the workflow.
-After the workflow finishes, check the results and download the Allure report artifact.
+1. Open the repository on GitHub and select **Actions**.
+2. Choose **Day 40 Meridian Capstone**.
+3. Select **Run workflow** on the `main` branch.
+4. After the run, review the results and download the Allure report artifact.
 
+## Keep private data out of commits
 
-To keep the project safe, keep these things in mind:
+- Do not commit `.env` files containing real credentials.
+- Do not commit `node_modules`.
+- Do not share private account information.
+- Do not commit reports containing private training-account data.
 
-Some things to keep out of GitHub:
-
-Do not upload .env files that contain real usernames, passwords, or other credentials.
-Do not upload the node_modules folder.
-Do not share any private account information.
-Do not upload reports that contain data from private training accounts.
-
-Stick to committing your project code, safe example files, and documentation. If something contains real credentials or personal data, leave it out of the repo.
-
-Notes
-The quote and policy tests handle their own login.
-The API test does not require a browser or sign-in.
-Keep credentials and policy numbers private.
+The quote and policy tests sign in independently. The public API test does not require a browser or sign-in.
